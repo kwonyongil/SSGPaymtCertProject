@@ -1,5 +1,6 @@
 plugins {
 	id 'org.springframework.boot' version '2.5.3'
+	/* 스프링 부트의 의존성 관리 플러그인 */
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
@@ -16,12 +17,48 @@ configurations {
 	providedRuntime
 }
 
+/**
+ * 다음과 같이 선언하면 spring-boot-starter-dependencies 에서 정의한 버전을 덮어쓴다.
+ *
+ * See https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#managing-dependencies-customizing
+ */
+ext["h2.version"] = "1.4.199"
+
+/* dependencie 등록 블럭, hover하면 버전이 나온다. */
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+	/* 롬복 : @getter, @setter등 반복 메서드 작성 코드를 줄여줌 */
+	implementation("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	/* @ConfigurationProperties를 사용하여 application.yml값 자동 주입 */
+	implementation("org.springframework.boot:spring-boot-configuration-processor")
+	/* JPA */
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	/* security 기본적인 보안에 관련된 기능을 제공 Ex)인증, 로그인 페이지 등 제공 */
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	/**
+	 * actuate : springboot 모니터링 라이브러리, spring-boot-starter-web와 함께 사용
+	 * ex) http://localhost:8080/actuator 사용할 수 있는 모니터링 리스트
+	 * https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
+	 * self, health, health-path, info 등..
+ 	 */
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-tomcat")
+	/**
+	 * Spring boot 2.3.0.RELEASE 부터 spring-boot-starter-web 에서 분리됨
+	 * https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.3-Release-Notes
+	 */
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	/* h2 db 연동용 */
+	implementation("com.h2database:h2")
+	testImplementation ("org.springframework.boot:spring-boot-starter-test") {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+	runtimeOnly("com.h2database:h2")
+	/* Java9 이상부터는 jaxb 의존성을 추가해야함 */
+	//compileOnly("javax.xml.bind:jaxb-api")
+
 }
 
 test {
