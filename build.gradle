@@ -29,6 +29,7 @@ dependencies {
 	/* 롬복 : @getter, @setter등 반복 메서드 작성 코드를 줄여줌 */
 	implementation("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	/* @ConfigurationProperties를 사용하여 application.yml값 자동 주입 */
 	implementation("org.springframework.boot:spring-boot-configuration-processor")
@@ -36,6 +37,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	/* security 기본적인 보안에 관련된 기능을 제공 Ex)인증, 로그인 페이지 등 제공 */
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	/* Thymeleaf에서 Spring Security 통합 모듈을 사용하기 위한 의존성 추가 */
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	/**
 	 * actuate : springboot 모니터링 라이브러리, spring-boot-starter-web와 함께 사용
 	 * ex) http://localhost:8080/actuator 사용할 수 있는 모니터링 리스트
@@ -49,6 +52,8 @@ dependencies {
 	 * https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.3-Release-Notes
 	 */
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	/* JSP대신 springboot가 권장하는 view 템플릿 엔진 */
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	/* h2 db 연동용 */
 	implementation("com.h2database:h2")
 	testImplementation ("org.springframework.boot:spring-boot-starter-test") {

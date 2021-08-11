@@ -35,7 +35,6 @@ import javax.persistence.*;
  */
 @Entity
 @ToString(exclude = "password")
-@Setter
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)

@@ -1,25 +1,30 @@
 # default: 공통Common 적용
-# Spring이 고도화되면서 점차 properties 파일은 사용되지 않음
+# 'Spring' 이 고도화되면서 점차 properties 파일은 사용되지 않음
 # 계층구조 표현으로 가독성이 더 좋고
 # spring profiles 적용시 하나의 파일으로 해결이 가능
+# dialect 방언 H2Dialect
+# use_sql_comments 추가적인 주석 표시
+# format_sql sql 이쁘게보기
 # driver-class-name: org.h2.Driver
+# org.hibernate.type: trace : 로그에있는 ? 값에 값 표시
 # ddl-auto :
 # 1. create : 항상 테이블 생성,
-# 2. updqte : 수정사항있으면 반영 없을시 생성
+# 2. update : 수정사항있으면 반영 없을시 생성
 
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
+    url: jdbc:h2:tcp://localhost/~/test;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
     username: sa
     password:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: create
-    show-sql: true
     properties:
       hibernate:
+        show-sql: true
         format_sql: true
+        use_sql_comments: true
   config:
     activate:
       on-profile: local
@@ -30,6 +35,7 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+    org.hibernate.type: trace
 
 ---
 
