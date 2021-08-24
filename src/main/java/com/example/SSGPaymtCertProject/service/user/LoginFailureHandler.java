@@ -1,4 +1,4 @@
-package com.example.SSGPaymtCertProject.Service.user;
+package com.example.SSGPaymtCertProject.service.user;
 
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;

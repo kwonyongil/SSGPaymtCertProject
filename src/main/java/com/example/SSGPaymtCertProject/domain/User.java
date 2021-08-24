@@ -2,11 +2,16 @@ package com.example.SSGPaymtCertProject.domain;
 
 import com.example.SSGPaymtCertProject.domain.base.BaseEntity;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * @since 2021. 08. 04
+ * @since 2021. 08. 18
  * @author kwon-yong-il
  *
  *         <h2>JPA와 LOMBOK 사용</h2>
@@ -32,15 +37,18 @@ import javax.persistence.*;
  *         <p> onlyExplicitlyIncluded = true : EqualsAndHashCode.Include가 있는 필드만 포함 (ToString도 사용가능)</p>
  *         <h3>5. callSuper = false </h3>
  *         <p>부모 필드는 제외</p>
+ *         <h3>6. SpringSecurity UserDetail 구현 </h3>
+ *         <p>RoleEnum을 정의했으므로 권한을 오버라이딩 하기 위해 getAuthorities 메서드 구현</p>
  */
 @Entity
 @ToString(exclude = "password")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Table(name = "USER",
         uniqueConstraints = {@UniqueConstraint(name = "MBR_LOGIN_ID_UNIQUE", columnNames = {"MBR_LOGIN_ID"})})
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -63,13 +71,55 @@ public class User extends BaseEntity {
     @Column(name = "USER_NAME", nullable = false, length = 10)
     private String userName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE_TYPE", nullable = false)
+    private RoleEnum roleType = RoleEnum.ROLE_USER;
+
     @Builder
-    public User(String mbrLoginId, String password, String email, String userName, String regpeId, String modpeId) {
+    public User(String mbrLoginId, String password, String email, String userName,
+                    String regpeId, String modpeId, RoleEnum roleType) {
         this.mbrLoginId = mbrLoginId;
         this.password = password;
         this.email = email;
         this.userName = userName;
         this.regpeId = regpeId;
         this.modpeId = modpeId;
+        this.roleType = roleType;
+    }
+
+    /**
+     * 해당 유저의 권한을 리턴
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        ArrayList<GrantedAuthority> auth = new ArrayList<>();
+        String role = this.roleType.getRole();
+        auth.add(new SimpleGrantedAuthority(role));
+        return auth;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.mbrLoginId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

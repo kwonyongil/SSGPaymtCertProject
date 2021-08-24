@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <!--  jquery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+            crossorigin="anonymous"></script>
+    <!-- <link rel="stylesheet" href="../..//resources/css/login.css"> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="${_csrf.parameterName}" content="${_csrf.token}" />
+
+    <title>회원가입 페이지</title>
+
+    <script type="text/javascript">
+
+        jQuery.fn.serializeObject = function() {
+            var obj = null;
+            try {
+                if (this[0].tagName) {
+                    var arr = this.serializeArray();
+                    if (arr) {
+                        obj = {};
+                        jQuery.each(arr, function() {
+                            obj[this.name] = this.value;
+                        });
+                    }//if ( arr ) {
+                }
+            } catch (e) {
+                alert(e.message);
+            } finally {
+            }
+
+            return obj;
+        };
+
+        function doSignUp() {
+
+            if (!doValidation()) {
+                return;
+            }
+
+            /* 		var data = {};
+                    $("form[name=signUpForm]").serializeArray().forEach(function(element) {
+                        data[element.name] = element.value;
+                    }); */
+            var formData = JSON.stringify($("form[name=signUpForm]").serializeObject());
+
+            alert(formData);
+
+            $.ajax({
+                url : "signup",
+                type : "POST",
+                dataType : 'json',
+                /* data : JSON.stringify(data), */
+                data : formData,
+                contentType : "application/json; charset=utf-8",
+                success : function(data) {
+                    if (data.code === "0000") {
+                        alert(data.msg + " " + data.signupId);
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error : function(request, status, error) {
+                    alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+                }
+            })
+        }
+
+        function doValidation() {
+            if (signUpForm.mbrLoginId.value === "") {
+                alert("아이디를 입력해주세요.");
+                return false;
+            }
+            if (signUpForm.password.value === "") {
+                alert("패스워드를 입력해주세요.");
+                return false;
+            }
+            if (signUpForm.userName.value === "") {
+                alert("이름을 입력해주세요.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <h1>회원가입 PAGE</h1>
+
+    <section class="signUpSec">
+        <form name="signUpForm">
+            <ul>
+                <li>
+                    <label for="mbrLoginId">ID</label>
+                    <input id="mbrLoginId" type="text" name="mbrLoginId" placeholder="LOGIN ID" required>
+                </li>
+                <li>
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" placeholder="PASSWORD" required>
+                </li>
+                <li>
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" placeholder="EMAIL" required></li>
+                <li>
+                    <label for="userName">Name</label>
+                    <input id="userName" type="text" name="userName" placeholder="NAME" required></li>
+                <li>
+                <li>
+                    <input id="regpeId" type="hidden" name="regpeId" value="SSG">
+                </li>
+                <li>
+                    <input type="button" value="회원가입" onclick="doSignUp()" />
+                </li>
+            </ul>
+        </form>
+        <a th:href="@{/main}">메인</a>
+    </section>
+</body>
+</html>
+

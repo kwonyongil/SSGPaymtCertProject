@@ -10,6 +10,7 @@
 # ddl-auto :
 # 1. create : 항상 테이블 생성,
 # 2. update : 수정사항있으면 반영 없을시 생성
+# thymeleaf cache : false 수정 반영 즉각 반영, 운영모드는 true
 
 spring:
   datasource:
@@ -31,6 +32,8 @@ spring:
   h2:
     console:
       enabled: true
+  thymeleaf:
+    cache: false
 
 logging:
   level:

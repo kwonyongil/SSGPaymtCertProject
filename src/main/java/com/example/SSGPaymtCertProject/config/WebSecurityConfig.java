@@ -1,7 +1,9 @@
 package com.example.SSGPaymtCertProject.config;
 
-import com.example.SSGPaymtCertProject.Service.user.LoginFailureHandler;
-import com.example.SSGPaymtCertProject.Service.user.LoginSuccessHandler;
+import com.example.SSGPaymtCertProject.service.user.LoginFailureHandler;
+import com.example.SSGPaymtCertProject.service.user.LoginSuccessHandler;
+import com.example.SSGPaymtCertProject.service.user.SsgUserAuthProvider;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,8 +23,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new SsgUserAuthProvider();
+    }
+    /**
+     * PasswordEncoder (BCryptPasswordEncoder)는 Bean 등록이 안되어있기 때문에 빈 등록해준다.
+     * @return BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -35,11 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("springboot").password("password").roles("USER");
-    }
-
-    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // 페이지 권한 설정
@@ -47,14 +54,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/info").hasRole("MEMBER")
                 .antMatchers("/**").permitAll()
 
-                .and()// 로그인 설정
+                .and() // 로그인 설정
                 .formLogin()
                 .successHandler(new LoginSuccessHandler())
                 .failureHandler(new LoginFailureHandler())
                 .loginPage("/login")
+                .loginProcessingUrl("/login/perform")
                 .usernameParameter("mbrLoginId")
                 .passwordParameter("password")
-                 // .loginProcessingUrl("/login/perform")
                 .defaultSuccessUrl("/login/success")
                 .failureUrl("/login?status=fail")
 
@@ -65,18 +72,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
 
                 .and() // 예외발생시 핸들링 여기선 로그인 페이지 가도록 설정
+                .csrf().disable()// 실 운영시에는 csrf 토큰을 보내도록 해야함
                 .exceptionHandling().accessDeniedPage("/login?status=denied")
-
-                .and() // 세션 설정
+                .and() // authenticationProvider 커스텀 Provider 등록 및 세션관련 설정
+                .authenticationProvider(authenticationProvider())
                 .sessionManagement()
-                .invalidSessionUrl("/login")
+                // invalidSessionUrl 세션이 유효하지 않을시 (로그인 안된 상태 포함)
+                // .invalidSessionUrl("/login?status=logout")
                 .maximumSessions(1)
-                .expiredUrl("/login");
-
+                // expiredUrl 세션이 만료되었을
+                .expiredUrl("/login?status=logout");
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        return null;
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
     }
 }
