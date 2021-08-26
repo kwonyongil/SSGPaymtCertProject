@@ -3,6 +3,7 @@ package com.example.SSGPaymtCertProject.domain;
 import com.example.SSGPaymtCertProject.domain.base.BaseEntity;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.SpringSecurityCoreVersion;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -50,6 +51,8 @@ import java.util.Collection;
         uniqueConstraints = {@UniqueConstraint(name = "MBR_LOGIN_ID_UNIQUE", columnNames = {"MBR_LOGIN_ID"})})
 public class User extends BaseEntity implements UserDetails {
 
+    private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
+
     @Id
     @GeneratedValue
     @EqualsAndHashCode.Include
@@ -68,20 +71,19 @@ public class User extends BaseEntity implements UserDetails {
     private String email;
 
     @EqualsAndHashCode.Include
-    @Column(name = "USER_NAME", nullable = false, length = 10)
-    private String userName;
+    @Column(name = "NAME", nullable = false, length = 10)
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE_TYPE", nullable = false)
     private RoleEnum roleType = RoleEnum.ROLE_USER;
 
     @Builder
-    public User(String mbrLoginId, String password, String email, String userName,
-                    String regpeId, String modpeId, RoleEnum roleType) {
+    public User(String mbrLoginId, String password, String email, String name,String regpeId, String modpeId, RoleEnum roleType) {
         this.mbrLoginId = mbrLoginId;
         this.password = password;
         this.email = email;
-        this.userName = userName;
+        this.name = name;
         this.regpeId = regpeId;
         this.modpeId = modpeId;
         this.roleType = roleType;

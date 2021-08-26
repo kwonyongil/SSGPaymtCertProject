@@ -3,18 +3,31 @@ plugins {
 	/* 스프링 부트의 의존성 관리 플러그인 */
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	/* 롬복, query-dsl 충돌 방지 */
+	id "io.franzbecker.gradle-lombok" version "4.0.0"
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-repositories {
-	mavenCentral()
+// 실행시키면 QueryDSL의 QClass 생성가능하다.
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
 }
 
 configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+
 	providedRuntime
+}
+
+repositories {
+	mavenCentral()
 }
 
 /**
@@ -27,12 +40,12 @@ ext["h2.version"] = "1.4.199"
 /* dependencie 등록 블럭, hover하면 버전이 나온다. */
 dependencies {
 	/* 롬복 : @getter, @setter등 반복 메서드 작성 코드를 줄여줌 */
-	implementation("org.projectlombok:lombok")
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor("org.projectlombok:lombok")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	/* @ConfigurationProperties를 사용하여 application.yml값 자동 주입 */
-	implementation("org.springframework.boot:spring-boot-configuration-processor")
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	/* JPA */
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	/* security 기본적인 보안에 관련된 기능을 제공 Ex)인증, 로그인 페이지 등 제공 */
@@ -56,12 +69,31 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	/* h2 db 연동용 */
 	implementation("com.h2database:h2")
-	testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
 
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 StringUtils
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
+	// QueryDSL
+	implementation 'com.querydsl:querydsl-jpa'
+	implementation("com.querydsl:querydsl-apt")
+	/**
+	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함
+	 * - JUnit 5 (JUnit 4와의 하위 호환성을위한 빈티지 엔진 포함)
+	 * - AssertJ, Hamcrest, Mockito, JSONassert, JsonPath
+	 * Spring Boot 2.4.0 부터 junit-vintage-engine 이 제거되었다.
+	 * Spring Boot 2.4.0 으로 업그레이드 하려면 JUnit5 로 이관을 마쳐야 한다.
+	 * JUnit 5로 마이그레이션 한 경우 다음 예제와 같이 JUnit 4 지원을 제외해야 한다. 빈티지 엔진을 exclude 한다.
+	 * Junit 5에서는 jupiter를 의존해 추가 기능을 사용해야 한다. (ex: @BeforeEach )
+	 */
+	testImplementation ("org.springframework.boot:spring-boot-starter-test") {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+	/* test 시에도 query dsl 모델을 사용하기 위해서는 해당 옵션을 추가 해줘야 한다. */
+	testCompileOnly("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
 
 	runtimeOnly("com.h2database:h2")
 	/* Java9 이상부터는 jaxb 의존성을 추가해야함 */
@@ -76,4 +108,34 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+/* queryDSL QClass 가 생성될 경로 설정 */
+/* project structure module 에서 해당 경로를 'source' 에 main/java 아래에 추가 필요 */
+def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslSrcDir
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslSrcDir]
+		}
+	}
+}
+
+//querydsl 추가 끝
+
+/* lombok 을 사용한 다면 해당 옵션을 넣어줘야 cannot find symbol 에러가 발생하지 않는다 */
+project.afterEvaluate {
+
+	project.tasks.compileQuerydsl.options.compilerArgs = [
+			"-proc:only",
+			"-processor", project.querydsl.processors() +
+					',lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
+	]
 }

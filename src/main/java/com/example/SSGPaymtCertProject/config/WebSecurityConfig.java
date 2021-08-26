@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
 
                 .and() // 예외발생시 핸들링 여기선 로그인 페이지 가도록 설정
-                .csrf().disable()// 실 운영시에는 csrf 토큰을 보내도록 해야함
+                .csrf().disable() // 실 운영시에는 csrf 토큰을 보내도록 해야함
                 .exceptionHandling().accessDeniedPage("/login?status=denied")
                 .and() // authenticationProvider 커스텀 Provider 등록 및 세션관련 설정
                 .authenticationProvider(authenticationProvider())
