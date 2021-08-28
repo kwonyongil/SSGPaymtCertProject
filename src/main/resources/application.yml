@@ -38,9 +38,11 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
-    org.hibernate.type: trace
+    org.hibernate.type: debug
 
 ---
+
+
 
 # 운영서버 적용
 #spring:
