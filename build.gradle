@@ -73,8 +73,11 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 StringUtils
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
+	// logback 라이브러리는 spring-boot 에 포함되어잇지만 해당 버전에서는 라이브러리 추가가 필요하며 1.1.+ 버전은 호환안됨
+	implementation('ch.qos.logback:logback-classic:1.2.5')
+
 	// QueryDSL
-	implementation 'com.querydsl:querydsl-jpa'
+	implementation("com.querydsl:querydsl-jpa")
 	implementation("com.querydsl:querydsl-apt")
 	/**
 	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함
