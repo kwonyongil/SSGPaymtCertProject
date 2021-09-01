@@ -1,5 +1,6 @@
 package com.example.SSGPaymtCertProject.domain;
 
+import com.example.SSGPaymtCertProject.exception.ApiException;
 import com.example.SSGPaymtCertProject.repository.UserRepository;
 import com.example.SSGPaymtCertProject.service.user.UserService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -97,7 +98,7 @@ class UserTest {
 
     @Test
     public void 회원가입_테스트() {
-        Long id = userService.join(kwonUser);
+        Long id = (Long) userService.join(kwonUser);
         // 저장이 잘 되었다면, Builder 패턴이 잘 적용되었음 또한 알 수 있다.
         // 2.0 버전이후 Spring-Data-Jpa 에서 'findOne()' 이 'findById()' 로 수정됨.
         // 2.0 버전이후 Spring-Data-Jpa 에서 리턴값도 'Optional' 로 수정됨.
@@ -122,13 +123,13 @@ class UserTest {
     }
 
     // junit 4 예외 테스트 방법
-    //@Test(expected = IllegalStateException.class)
+    //@Test(expected = ApiException.class)
     @Test
     public void 중복_회원_예외_테스트() throws Exception {
-        // 두 픽스쳐는 loginId가 같아서 IllegalStateException 예외가 발생한다.
+        // 두 픽스쳐는 loginId가 같아서 ApiException 예외가 발생한다.
         userService.join(kwonUser2);
         // junit 5 예외테스트 Executable executable 인자
-        assertThrows(IllegalStateException.class, () -> userService.join(kwonUser3));
+        assertThrows(ApiException.class, () -> userService.join(kwonUser3));
     }
 
     @Test

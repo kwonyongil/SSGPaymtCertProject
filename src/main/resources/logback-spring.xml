@@ -3,8 +3,8 @@
 <configuration scan="true" scanPeriod="60 seconds">
 
     <!-- 변수 지정 -->
-    <property name="LOG_DIR" value="../logs" />
-    <property name="LOG_DIR2" value="/Users/kwon-yong-il/logs" />
+    <property name="LOG_DIR" value="./logs" />
+    <property name="LOG_DIR2" value="./logs2" />
 
     <!--콘솔에 로그를 남깁니다.-->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
@@ -14,6 +14,11 @@
             </Pattern>
             <charset>UTF-8</charset>
         </encoder>
+    </appender>
+
+    <!-- Sentry 설정 (사이트 권장 : warn -->
+    <appender name="Sentry" class="io.sentry.logback.SentryAppender">
+        <minimumEventLevel>ERROR</minimumEventLevel> <!-- Sentry 4.3 버전부터 filter 대신 사용 -->
     </appender>
 
     <!--파일에 로그를 남깁니다.-->
@@ -83,6 +88,7 @@
             <appender-ref ref="File"/>
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="Error"/>
+            <appender-ref ref="Sentry"/>
         </root>
     </springProfile>
     <springProfile name="prod">
@@ -91,6 +97,7 @@
             <appender-ref ref="File"/>
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="Error"/>
+            <appender-ref ref="Sentry"/>
         </root>
     </springProfile>
 

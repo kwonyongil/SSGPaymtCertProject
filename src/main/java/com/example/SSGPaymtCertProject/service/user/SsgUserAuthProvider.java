@@ -1,5 +1,7 @@
 package com.example.SSGPaymtCertProject.service.user;
 
+import com.example.SSGPaymtCertProject.exception.ApiException;
+import com.example.SSGPaymtCertProject.exception.ExceptionEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,7 +39,7 @@ public class SsgUserAuthProvider implements AuthenticationProvider {
         UserDetails user = userService.loadUserByUsername(loginId);
 
         if (user == null || !passwordEncoder.matches(loginPwd, user.getPassword())) {
-            throw new BadCredentialsException(loginId);
+            throw new ApiException(ExceptionEnum.ERROR_USER_BAD_CREDENTIALS);
         }
 
         return new UsernamePasswordAuthenticationToken(loginId, hashedLoginPwd, user.getAuthorities());

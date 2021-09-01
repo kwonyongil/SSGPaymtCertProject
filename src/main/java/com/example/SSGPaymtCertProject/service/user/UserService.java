@@ -1,6 +1,8 @@
 package com.example.SSGPaymtCertProject.service.user;
 
 import com.example.SSGPaymtCertProject.domain.User;
+import com.example.SSGPaymtCertProject.exception.ApiException;
+import com.example.SSGPaymtCertProject.exception.ExceptionEnum;
 import com.example.SSGPaymtCertProject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +32,7 @@ public class UserService implements UserDetailsService {
 
         UserDetails user = userRepository.findByMbrLoginId(username);
         if (user == null) {
-            throw new UsernameNotFoundException("No user found with userId" + username);
+            throw new ApiException(ExceptionEnum.ERROR_USER_NOTFOUND);
         }
         return user;
     }
@@ -48,11 +50,7 @@ public class UserService implements UserDetailsService {
         try {
             // 중복 회원 검증
             if (!validateDuplicateMember(user)) {
-                resMap.put("code", "0001");
-                resMap.put("msg", "이미 존재하는 회원입니다.");
-                resMap.put("signupId", user.getId());
-
-                return resMap;
+                throw new ApiException(ExceptionEnum.ERROR_USER_REDUPLICATION);
             }
 
             String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -65,8 +63,7 @@ public class UserService implements UserDetailsService {
             resMap.put("signupId", user.getMbrLoginId());
 
         } catch (Exception e){
-            resMap.put("code", "9999");
-            resMap.put("msg", "정의되지 않은 에러 발생");
+            throw e;
         }
 
         return resMap;
@@ -86,9 +83,5 @@ public class UserService implements UserDetailsService {
         }
 
         return true;
-    }
-
-    public void serviceExceptionTest(){
-        throw new RuntimeException("Service Exception TEST");
     }
 }

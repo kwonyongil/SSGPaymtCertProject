@@ -50,9 +50,8 @@ public class UserController {
 
     @GetMapping(value = "/sentry/exception/service")
     public void exceptionService() {
-        userService.serviceExceptionTest();
-
-        logger.info("어렵당 너무 ㅠㅠ ");
+        logger.error("어렵당 너무 ㅠㅠ ");
+//        Sentry.captureException(new Exception("ssssss"));
     }
 
 }
