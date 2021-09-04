@@ -41,12 +41,12 @@ import java.util.Collection;
  *         <h3>6. SpringSecurity UserDetail 구현 </h3>
  *         <p>RoleEnum을 정의했으므로 권한을 오버라이딩 하기 위해 getAuthorities 메서드 구현</p>
  */
-@Entity
 @ToString(exclude = "password")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@Entity
 @Table(name = "USER",
         uniqueConstraints = {@UniqueConstraint(name = "MBR_LOGIN_ID_UNIQUE", columnNames = {"MBR_LOGIN_ID"})})
 public class User extends BaseEntity implements UserDetails {
