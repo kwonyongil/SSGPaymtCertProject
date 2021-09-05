@@ -27,8 +27,8 @@ public class Item extends BaseEntity {
 
     private Long price;
 
-    // @OneToMany는 기본 전략으로 LAZY를 택한다.
-    // CasadeType ALL : PERSIST, MERGE, REMOVE, REFRESH, DETACH 모두 적용
+    // @OneToMany 는 기본 전략으로 LAZY 를 택한다.
+    // CascadeType ALL : PERSIST, MERGE, REMOVE, REFRESH, DETACH 모두 적용
     // orphanRemoval : 부모객체가 삭제됬을 때 자식객체 까지 삭제
     @OneToMany(
             mappedBy = "item",

@@ -28,7 +28,7 @@ public class Ord extends BaseEntity {
     @Column(name = "ORD_RCP_DTS", nullable = false)
     private Date ordRcpDts;
 
-    // @OneToMany Fetch기본전략은 LAZY이지만 유저 데이타를 이용할 일이 많으므로 그룹은 즉시 로딩을 하도록 한다.
+    // @OneToMany Fetch 기본전략은 LAZY 이지만 유저 데이타를 이용할 일이 많으므로 그룹은 즉시 로딩을 하도록 한다.
     @OneToMany(mappedBy = "ord", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrdItem> ordItems = new ArrayList<>();
 
