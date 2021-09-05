@@ -47,24 +47,20 @@ public class UserService implements UserDetailsService {
     public Object join(User user) {
         HashMap<String, Object> resMap = new HashMap<>();
 
-        try {
-            // 중복 회원 검증
-            if (!validateDuplicateMember(user)) {
-                throw new ApiException(ExceptionEnum.ERROR_USER_REDUPLICATION);
-            }
-
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
-
-            userRepository.save(user);
-
-            resMap.put("code", "0000");
-            resMap.put("msg", "회원가입 성공");
-            resMap.put("signupId", user.getMbrLoginId());
-
-        } catch (Exception e){
-            throw e;
+        // 중복 회원 검증
+        if (!validateDuplicateMember(user)) {
+            throw new ApiException(ExceptionEnum.ERROR_USER_REDUPLICATION);
         }
+
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
+
+        resMap.put("code", "0000");
+        resMap.put("msg", "회원가입 성공");
+        resMap.put("signupId", user.getMbrLoginId());
+        resMap.put("id", user.getId());
 
         return resMap;
     }
@@ -78,10 +74,6 @@ public class UserService implements UserDetailsService {
     private boolean validateDuplicateMember(User user) {
         User findUser = userRepository.findByMbrLoginId(user.getMbrLoginId());
 
-        if (findUser != null) {
-            return false;
-        }
-
-        return true;
+        return findUser == null;
     }
 }

@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.assertj.core.api.BDDAssertions.then;
@@ -98,7 +99,8 @@ class UserTest {
 
     @Test
     public void 회원가입_테스트() {
-        Long id = (Long) userService.join(kwonUser);
+        HashMap<String, Object> resMap = (HashMap<String, Object>) userService.join(kwonUser);
+        long id = (long) resMap.get("id");
         // 저장이 잘 되었다면, Builder 패턴이 잘 적용되었음 또한 알 수 있다.
         // 2.0 버전이후 Spring-Data-Jpa 에서 'findOne()' 이 'findById()' 로 수정됨.
         // 2.0 버전이후 Spring-Data-Jpa 에서 리턴값도 'Optional' 로 수정됨.
@@ -125,7 +127,7 @@ class UserTest {
     // junit 4 예외 테스트 방법
     //@Test(expected = ApiException.class)
     @Test
-    public void 중복_회원_예외_테스트() throws Exception {
+    public void 중복_회원_예외_테스트() {
         // 두 픽스쳐는 loginId가 같아서 ApiException 예외가 발생한다.
         userService.join(kwonUser2);
         // junit 5 예외테스트 Executable executable 인자

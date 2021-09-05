@@ -1,6 +1,7 @@
 package com.example.SSGPaymtCertProject.domain;
 
 import com.example.SSGPaymtCertProject.domain.base.BaseEntity;
+import com.example.SSGPaymtCertProject.domain.dto.OrdDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,10 +19,10 @@ public class Ord extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "ORDER_NO")
-    private Long ordrNo;
+    private Long orderNo;
 
     @Column(name = "ORORDER_NO", nullable = false)
-    private Long orordNo;
+    private Long ororderNo;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ORD_RCP_DTS", nullable = false)
@@ -32,14 +33,26 @@ public class Ord extends BaseEntity {
     private List<OrdItem> ordItems = new ArrayList<>();
 
     @Builder
-    public Ord(Long ordrNo, Long orordNo, Date ordRcpDts) {
-        this.ordrNo = ordrNo;
-        this.orordNo = orordNo;
+    public Ord(Long orderNo, Long ororderNo, Date ordRcpDts, String regpeId, String modpeId) {
+        this.orderNo = orderNo;
+        this.ororderNo = ororderNo;
         this.ordRcpDts = ordRcpDts;
+        this.regpeId = regpeId;
+        this.modpeId = modpeId;
     }
 
     //==연관관계 메서드==//
     public void addOrdItem(OrdItem ordItem) {
         ordItems.add(ordItem);
+    }
+
+    public OrdDto toOrdDto() {
+        OrdDto ordDto = new OrdDto();
+        ordDto.setOrderNo(this.orderNo);
+        ordDto.setOrorderNo(this.ororderNo) ;
+        ordDto.setOrdRcpDts(this.ordRcpDts);
+        ordDto.setRegpeId(this.regpeId);
+        ordDto.setModpeId(this.modpeId);
+        return ordDto;
     }
 }
