@@ -1,11 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
-<configuration scan="true" scanPeriod="60 seconds">
-
-    <!-- 변수 지정 -->
-    <property name="LOG_DIR" value="./logs" />
-    <property name="LOG_DIR2" value="./logs2" />
-
+<configuration>
     <!--콘솔에 로그를 남깁니다.-->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -16,14 +9,9 @@
         </encoder>
     </appender>
 
-    <!-- Sentry 설정 (사이트 권장 : warn -->
-    <appender name="Sentry" class="io.sentry.logback.SentryAppender">
-        <minimumEventLevel>ERROR</minimumEventLevel> <!-- Sentry 4.3 버전부터 filter 대신 사용 -->
-    </appender>
-
     <!--파일에 로그를 남깁니다.-->
     <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/output.log</file>
+        <file>./logs/output.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n
@@ -37,38 +25,12 @@
         </rollingPolicy>
     </appender>
 
-    <!--파일에 로그를 남깁니다. -->
-    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-
-        <file>${LOG_DIR2}/rolling.log</file>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n</Pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-
-        <!-- 10MB가 넘어가면 새로운 압축파일이 생성 -->
-        <triggeringPolicy
-                class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>20MB</MaxFileSize>
-        </triggeringPolicy>
-
-        <!-- 파일을 덮어쓰는 정책 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <FileNamePattern>${LOG_DIR2}/rolling.log.%i.log.zip</FileNamePattern>
-            <!--
-                20MB 단위로 로그 압축 파일이 생성된다.
-                20개가 넘어가면 오래된순으로 덮어쓰기 됩니다.
-            -->
-            <MaxIndex>20</MaxIndex>
-        </rollingPolicy>
-    </appender>
-
     <!--에러 일 경우 파일에 로그를 남깁니다-->
     <appender name="Error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>error</level>
         </filter>
-        <file>${LOG_DIR}/error.log</file>
+        <file>./logs/error.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n
@@ -82,23 +44,15 @@
         </rollingPolicy>
     </appender>
 
-    <springProfile name="local">
-        <root level="DEBUG">
-            <appender-ref ref="Console"/>
-            <appender-ref ref="File"/>
-            <appender-ref ref="RollingFile"/>
-            <appender-ref ref="Error"/>
-            <appender-ref ref="Sentry"/>
-        </root>
-    </springProfile>
-    <springProfile name="prod">
-        <root level="INFO">
-            <appender-ref ref="Console"/>
-            <appender-ref ref="File"/>
-            <appender-ref ref="RollingFile"/>
-            <appender-ref ref="Error"/>
-            <appender-ref ref="Sentry"/>
-        </root>
-    </springProfile>
+    <!-- Sentry 설정 (사이트 권장 : warn -->
+    <appender name="Sentry" class="io.sentry.logback.SentryAppender">
+        <minimumEventLevel>WARN</minimumEventLevel> <!-- Sentry 4.3 버전부터 filter 대신 사용 -->
+    </appender>
 
+    <root level="local">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="File"/>
+        <appender-ref ref="Error"/>
+        <appender-ref ref="Sentry"/>
+    </root>
 </configuration>
