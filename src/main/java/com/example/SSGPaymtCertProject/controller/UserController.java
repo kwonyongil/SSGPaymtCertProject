@@ -44,15 +44,13 @@ public class UserController {
         return userService.join(user);
     }
 
-    @GetMapping(value = "/sentry/exception")
-    public Object exception() throws Exception {
-        throw new IllegalAccessException("Sentry Exception TEST");
-    }
-
     @GetMapping(value = "/sentry/exception/service")
     public void exceptionService() {
-        logger.error("어렵당 너무 ㅠㅠ ");
-//        Sentry.captureException(new Exception("ssssss"));
+        try{
+            throw new Exception("TEST입니다.");
+        } catch (Exception e){
+            logger.error("Exceptin 발생", e);
+        }
     }
 
 }
