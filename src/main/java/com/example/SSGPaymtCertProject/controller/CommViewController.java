@@ -22,6 +22,7 @@ public class CommViewController
         model.setViewName("/main");
         return model;
     }
+
     /**
      * @return model
      *         <h2>로그인 성공시 포워딩되는 메소드, 메인 페이지</h2>

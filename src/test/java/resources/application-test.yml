@@ -18,6 +18,12 @@ spring:
   h2:
     console:
       enabled: true
+  devtools:
+    livereload:
+      enabled: true
+      port: 8080
+    restart:
+      enabled: true
   thymeleaf:
     cache: false
 

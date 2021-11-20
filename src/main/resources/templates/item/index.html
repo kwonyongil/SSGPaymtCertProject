@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>상품리스트123</title>
+</head>
+<body>
+<h2>SSG 상품목록</h2>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>ID....</th>
+            <th>상품이름...</th>
+            <th>가격</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${itemList}">
+        <th scope="row" th:text="${item.id}"></th>
+        <td><a th:href="@{/item/{itemId}(itemId=${item.id})}" th:text="${item.itemNm}"></a></td>
+        <td th:text="${item.price}"></td>
+        <td><a th:href="@{/item/delete/{itemId}(itemId=${item.id})}">제거</a></td>
+    </tr>
+    </tbody>
+</table>
+
+<a sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
+<a sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
+<a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+<a th:href="@{/main}">메인</a>
+</body>
+</html>

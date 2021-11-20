@@ -79,6 +79,11 @@ dependencies {
 	// QueryDSL
 	implementation("com.querydsl:querydsl-jpa")
 	implementation("com.querydsl:querydsl-apt")
+
+	// devtools 정적리소 liveReload
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+
 	/**
 	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함
 	 * - JUnit 5 (JUnit 4와의 하위 호환성을위한 빈티지 엔진 포함)
