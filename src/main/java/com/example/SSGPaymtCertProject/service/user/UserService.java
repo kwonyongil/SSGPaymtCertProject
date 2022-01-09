@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
 
         UserDetails user = userRepository.findByMbrLoginId(username);
         if (user == null) {
-            throw new ApiException(ExceptionEnum.ERROR_USER_NOTFOUND);
+            throw new UsernameNotFoundException("No user found with userId" + username);
         }
         return user;
     }

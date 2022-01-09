@@ -38,4 +38,16 @@ public class ItemViewController {
         model.setViewName("/item/index");
         return model;
     }
+
+    /**
+     * @return
+     * <h2>iteme등록 페이지</h2>
+     */
+    @GetMapping("/create")
+    public ModelAndView createPage() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("/item/create");
+        return model;
+    }
+
 }

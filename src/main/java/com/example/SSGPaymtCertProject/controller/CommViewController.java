@@ -33,4 +33,15 @@ public class CommViewController
         model.setViewName("/main");
         return model;
     }
+
+    /**
+     * @return model
+     *         <h2>404 페이지</h2>
+     */
+    @GetMapping(value = "/error")
+    public ModelAndView buttonsPage() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("/bootstrap/404");
+        return model;
+    }
 }

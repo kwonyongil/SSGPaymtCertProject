@@ -2,6 +2,8 @@ package com.example.SSGPaymtCertProject.service.item;
 
 import com.example.SSGPaymtCertProject.domain.Item;
 import com.example.SSGPaymtCertProject.domain.dto.ItemDto;
+import com.example.SSGPaymtCertProject.exception.ApiException;
+import com.example.SSGPaymtCertProject.exception.ExceptionEnum;
 import com.example.SSGPaymtCertProject.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +37,13 @@ public class ItemService {
                 .stream()
                 .map(Item::toItemDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ItemDto findById(Long id) {
+        Optional<Item> item = itemRepository.findById(id);
+        // 조회되는 회원이 없다면 예외 발생
+        return item.orElseThrow(() -> new ApiException(ExceptionEnum.ERROR_ITEM_NOTFOUND)).toItemDto();
     }
 
     @Transactional
@@ -64,6 +75,7 @@ public class ItemService {
                 .modpeId(itemDto.getModpeId())
                 .build();
         Item newItem = itemRepository.save(item);
+
         return newItem.toItemDto();
     }
 

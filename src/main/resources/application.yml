@@ -9,8 +9,8 @@
 # org.hibernate.type: trace : 로그에있는 ? 값에 값 표시
 # ddl-auto :
 # 1. create : 항상 테이블 생성,
-# 2. update : 수정사항있으면 반영 없을시 생성
-# devtools : livereload - 개발용만 true, 실서버는 false
+# 2. update : 수정된 스키마만 반영
+# devtools : livereload - 개발용만 true, 실서버는 false, port 는 아무거나
 # thymeleaf cache : false 수정 반영 즉각 반영, 운영모드는 true
 
 spring:
@@ -21,7 +21,7 @@ spring:
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show-sql: true

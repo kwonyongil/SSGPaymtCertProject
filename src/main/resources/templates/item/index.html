@@ -3,32 +3,135 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
-    <title>상품리스트123</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>상품리스트</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/bootstrap/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/bootstrap/css/sb-admin-2.min.css" rel="stylesheet" />
 </head>
-<body>
-<h2>SSG 상품목록</h2>
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>ID....</th>
-            <th>상품이름...</th>
-            <th>가격</th>
-        </tr>
-    </thead>
-    <tbody>
-    <tr th:each="item : ${itemList}">
-        <th scope="row" th:text="${item.id}"></th>
-        <td><a th:href="@{/item/{itemId}(itemId=${item.id})}" th:text="${item.itemNm}"></a></td>
-        <td th:text="${item.price}"></td>
-        <td><a th:href="@{/item/delete/{itemId}(itemId=${item.id})}">제거</a></td>
-    </tr>
-    </tbody>
-</table>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">SSG 상품목록</h1>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Dropdown Card Example -->
+                        <div class="card shadow mb-4" th:each="item : ${itemList}">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">
+                                    <a th:href="@{/item/{itemId}(itemId=${item.id})}" th:text="${item.itemNm}"></a>
+                                </h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <!--<div class="dropdown-header">Dropdown Header:</div>-->
+                                        <a class="dropdown-item" href="#">주문하기</a>
+                                        <a class="dropdown-item" href="#">장바구니 넣기</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" th:href="@{/item/delete/{itemId}(itemId=${item.id})}">
+                                            상품제거
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                주문가격 : <span th:text="${item.price}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; SSG STUDY 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="../../../../../../../../Downloads/startbootstrap-sb-admin-2-gh-pages/login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <a sec:authorize="isAnonymous()" th:href="@{/login}">로그인</a>
 <a sec:authorize="isAnonymous()" th:href="@{/signup}">회원가입</a>
 <a sec:authorize="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
 <a th:href="@{/main}">메인</a>
+<a th:href="@{/item/create}">상품등록</a>
+
+
+<!-- Bootstrap core JavaScript-->
+<script src="/bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="/bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/bootstrap/endor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/bootstrap/js/sb-admin-2.min.js"></script>
+
 </body>
 </html>
+
+
