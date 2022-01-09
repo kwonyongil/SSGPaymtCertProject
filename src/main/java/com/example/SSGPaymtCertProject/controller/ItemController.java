@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -54,7 +55,7 @@ public class ItemController {
      *  <h2>item 제거(GET)</h2>
      */
     @GetMapping(value = "/delete/{id}")
-    public ModelAndView delete(@PathVariable Long id) {
+    public ModelAndView delete(@PathVariable Long id, @PageableDefault(size = 20) Pageable pageable) {
         ModelAndView model = new ModelAndView();
         ItemDto itemDto = itemService.findById(id);
         boolean status = itemService.deleteItem(id);
@@ -65,7 +66,10 @@ public class ItemController {
             model.addObject("msg", "상품을 제거하는데 실패하였습니다.");
         }
 
-        model.setViewName("/item/create");
+        // Pageable pageable = PageRequest.of(0, 20); -- 'PageRequest' 직접 page 설정
+        List<ItemDto> itemDtoList = itemService.getItems(pageable);
+        model.addObject("itemList", itemDtoList);
+        model.setViewName("/item/index");
         return model;
     }
 }

@@ -4,6 +4,7 @@ import com.example.SSGPaymtCertProject.domain.dto.ItemDto;
 import com.example.SSGPaymtCertProject.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class ItemViewController {
      * <h2>상품목록페이지</h2>
      */
     @GetMapping("/index")
-    public ModelAndView indexPage(Pageable pageable) {
+    public ModelAndView indexPage(@PageableDefault(size = 20) Pageable pageable) {
         List<ItemDto> itemDtoList = itemService.getItems(pageable);
         ModelAndView model = new ModelAndView();
         model.addObject("itemList", itemDtoList);
