@@ -23,86 +23,7 @@
     <!-- Custom styles for this template-->
     <link href="/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
 
-    <script type="text/javascript">
 
-        jQuery.fn.serializeObject = function() {
-            var obj = null;
-            try {
-                if (this[0].tagName) {
-                    var arr = this.serializeArray();
-                    if (arr) {
-                        obj = {};
-                        jQuery.each(arr, function() {
-                            obj[this.name] = this.value;
-                        });
-                    }//if ( arr ) {
-                }
-            } catch (e) {
-                alert(e.message);
-            } finally {
-            }
-
-            return obj;
-        };
-
-        function doSignUp() {
-
-            if (!doValidation()) {
-                return;
-            }
-
-            /* 		var data = {};
-                    $("form[name=signUpForm]").serializeArray().forEach(function(element) {
-                        data[element.name] = element.value;
-                    }); */
-            var formData = JSON.stringify($("form[name=signUpForm]").serializeObject());
-
-            alert(formData);
-
-            $.ajax({
-                url : "signup",
-                type : "POST",
-                dataType : 'json',
-                /* data : JSON.stringify(data), */
-                data : formData,
-                contentType : "application/json; charset=utf-8",
-                success : function(data) {
-                    if (data.code === "0000") {
-                        alert(data.msg + " " + data.signupId);
-                    } else {
-                        alert(data.msg);
-                    }
-                },
-                error : function(request, status, error) {
-                    alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
-                }
-            })
-        }
-
-        function doValidation() {
-            if (signUpForm.mbrLoginId.value === "") {
-                alert("아이디를 입력해주세요.");
-                return false;
-            }
-            if (signUpForm.name.value === "") {
-                alert("이름을 입력해주세요.");
-                return false;
-            }
-            if (signUpForm.email.value === "") {
-                alert("이메일을 입력해주세요.");
-                return false;
-            }
-            if (signUpForm.password.value === "") {
-                alert("패스워드를 입력해주세요.");
-                return false;
-            }
-            if (signUpForm.password.value !== signUpForm.rePassword.value) {
-                alert("반복된 패스워드가 일치하지 않습니다.");
-                return false;
-            }
-            return true;
-        }
-    </script>
 </head>
 
 <body class="bg-gradient-primary">
@@ -181,6 +102,87 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/bootstrap/js/sb-admin-2.min.js"></script>
+
+    <script type="text/javascript">
+
+        $.fn.serializeObject = function() {
+            var obj = null;
+            try {
+                if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+                    var arr = this.serializeArray();
+                    if (arr) {
+                        obj = {};
+                        $.each(arr, function() {
+                            obj[this.name] = this.value;
+                        });
+                    }//if ( arr ) {
+                }
+            } catch (e) {
+                alert(e.message);
+            } finally {
+            }
+
+            return obj;
+        };
+
+        function doSignUp() {
+
+            if (!doValidation()) {
+                return;
+            }
+
+            /* 		var data = {};
+                    $("form[name=signUpForm]").serializeArray().forEach(function(element) {
+                        data[element.name] = element.value;
+                    }); */
+            var formData = JSON.stringify($("form[name=signUpForm]").serializeObject());
+
+            alert(formData);
+
+            $.ajax({
+                url : "signup",
+                type : "POST",
+                dataType : 'json',
+                /* data : JSON.stringify(data), */
+                data : formData,
+                contentType : "application/json; charset=utf-8",
+                success : function(data) {
+                    if (data.code === "0000") {
+                        alert(data.msg + " " + data.signupId);
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error : function(request, status, error) {
+                    alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+                }
+            })
+        }
+
+        function doValidation() {
+            if (signUpForm.mbrLoginId.value === "") {
+                alert("아이디를 입력해주세요.");
+                return false;
+            }
+            if (signUpForm.name.value === "") {
+                alert("이름을 입력해주세요.");
+                return false;
+            }
+            if (signUpForm.email.value === "") {
+                alert("이메일을 입력해주세요.");
+                return false;
+            }
+            if (signUpForm.password.value === "") {
+                alert("패스워드를 입력해주세요.");
+                return false;
+            }
+            if (signUpForm.password.value !== signUpForm.rePassword.value) {
+                alert("반복된 패스워드가 일치하지 않습니다.");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>
 

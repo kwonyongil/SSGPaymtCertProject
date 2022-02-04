@@ -7,10 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @since 2021. 11. 19
@@ -42,12 +44,28 @@ public class ItemViewController {
 
     /**
      * @return
-     * <h2>iteme등록 페이지</h2>
+     * <h2>item 등록 페이지</h2>
      */
     @GetMapping("/create")
     public ModelAndView createPage() {
         ModelAndView model = new ModelAndView();
         model.setViewName("/item/create");
+        return model;
+    }
+
+    /**
+     * @param id 상품 id
+     * @return
+     * <h2>상품상세페이지</h2>
+     */
+    @GetMapping("/{id}")
+    public ModelAndView showPage(@PathVariable("id") long id) {
+        Optional<ItemDto> itemData = Optional.ofNullable(itemService.findById(id));
+
+        ModelAndView model = new ModelAndView();
+
+        model.addObject("item", itemData);
+        model.setViewName("/item/show");
         return model;
     }
 

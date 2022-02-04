@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,7 +41,7 @@ public class ItemService {
     @Transactional
     public ItemDto findById(Long id) {
         Optional<Item> item = itemRepository.findById(id);
-        // 조회되는 회원이 없다면 예외 발생
+        // 조회되는 상품이 없다면 예외 발생
         return item.orElseThrow(() -> new ApiException(ExceptionEnum.ERROR_ITEM_NOTFOUND)).toItemDto();
     }
 
