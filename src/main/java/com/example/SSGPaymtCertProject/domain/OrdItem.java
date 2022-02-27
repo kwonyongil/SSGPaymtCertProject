@@ -1,7 +1,6 @@
 package com.example.SSGPaymtCertProject.domain;
 
 import com.example.SSGPaymtCertProject.domain.base.BaseEntity;
-import com.example.SSGPaymtCertProject.domain.dto.OrdItemDto;
 import lombok.*;
 
 import javax.persistence.*;

@@ -78,6 +78,10 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "ROLE_TYPE", nullable = false)
     private RoleEnum roleType = RoleEnum.ROLE_USER;
 
+    /**
+     * User Id 생성전략은 데이터베이스의 auto_increment 를 의존, Id를 넘겨받는 않아야 함
+     * createAt, updateAt 같은 경우는 @CreationTimestamp, @UpdateTimestamp 각각의 어노테이션이 해당 일을 담당하고 있습니다. 이 처럼 객채 생성시 받지 않아야 할 데이터들이 클래스 상단 @Builder를 사용하게 되면 발생하게 됩니다.
+     */
     @Builder
     public User(String mbrLoginId, String password, String email, String name,String regpeId, String modpeId, RoleEnum roleType) {
         this.mbrLoginId = mbrLoginId;

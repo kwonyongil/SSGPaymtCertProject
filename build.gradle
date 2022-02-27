@@ -6,11 +6,57 @@ plugins {
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 	/* 롬복, query-dsl 충돌 방지 */
 	id "io.franzbecker.gradle-lombok" version "4.0.0"
+	/**
+	 *  AsciiDoc 파일을 컨버팅하고 Build 폴더에 복사하기 위한 플러그인입니다.
+	 *  gradle 7 부터는 org.asciidoctor.convert 가 아닌
+	 * asciidoctor.jvm.convert 를 사용해야한다. (현재 7.1.1 gradle.wrapper.properties 확인)
+	 */
+	// id "org.asciidoctor.convert" version "1.5.9.2"
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+test {
+	outputs.dir snippetsDir
+}
+
+// gradle build 시 test -> asciidoctor 순으로 수행됩니다.
+asciidoctor {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+asciidoctor.doFirst {
+	delete file('src/main/resources/static/docs')
+}
+
+bootJar {
+	// gradle build 시 asciidoctor -> bootJar 순으로 수행됩니다.
+	dependsOn asciidoctor
+	// gradle build 시 ./build/asciidoc 에 html 파일이 생깁니다.
+	// 이것을 jar 안에 /static/docs/ 폴더에 복사가 됩니다.
+	copy {
+		from "${asciidoctor.outputDir}"
+		into 'BOOT-INF/classes/static/docs'
+	}
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+build {
+	dependsOn copyDocument
+}
 
 // 실행시키면 QueryDSL의 QClass 생성가능하다.
 compileQuerydsl{
@@ -37,14 +83,18 @@ repositories {
  */
 ext["h2.version"] = "1.4.199"
 
-/* dependencie 등록 블럭, hover하면 버전이 나온다. */
+/* dependencie 등록 블럭, hover 하면 버전이 나온다. */
 dependencies {
-	/* 롬복 : @getter, @setter등 반복 메서드 작성 코드를 줄여줌 */
+	implementation 'junit:junit:4.13.1'
+	implementation 'junit:junit:4.13.1'
+
+	/* 롬복 : @getter, @setter 등 반복 메서드 작성 코드를 줄여줌 */
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor("org.projectlombok:lombok")
 
+	/* MVC, Jackson, Databind, Hibernate, log4j 등의 의존성 포함 */
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	/* @ConfigurationProperties를 사용하여 application.yml값 자동 주입 */
+	/* @ConfigurationProperties 를 사용하여 application.yml값 자동 주입 */
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	/* JPA */
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -83,6 +133,13 @@ dependencies {
 	// devtools 정적리소 liveReload
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+	// 객체의 프로퍼티를 다른 객체의 프로퍼티로 맵핑해주는 유틸리티
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.5'
+
+	// validation 지원 ex) @Valid
+	// 이 빈 검증 기능을 이용하려면 LocalValidatorFactoryBean 을 빈으로 등록하고 VaidationService 를 제공해주어야 하는데,
+	// SpringBoot 에서는 의존성만 추가하면 검증을 위한 빈들이 자동으로 등록된다.
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	/**
 	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함
@@ -112,6 +169,9 @@ dependencies {
 	/*logback에 찍히는 로그 정보를 Sentry에서 모니터링하고 싶은 경우 사용 라이브러리*/
 	implementation("io.sentry:sentry-logback:5.1.1")
 
+	/* mockmvc 를 restdocs 에 사용할수 있게 하는 라이브러리입니다. Rest Assured 를 사용하자고 하시면
+	testCompile('org.springframework.restdocs:spring-restdocs-restassured') 를 대신 사용하시면 됩니다. */
+	testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
 }
 
 test {

@@ -53,19 +53,6 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemDto updateItem(ItemDto itemDto) {
-        Item item = Item.builder()
-                .id(itemDto.getId())
-                .itemNm(itemDto.getItemNm())
-                .price(itemDto.getPrice())
-                .regpeId(itemDto.getRegpeId())
-                .modpeId(itemDto.getModpeId())
-                .build();
-        Item newItem = itemRepository.save(item);
-        return newItem.toItemDto();
-    }
-
-    @Transactional
     public ItemDto createItem(ItemDto itemDto) {
         Item item = Item.builder()
                 .itemNm(itemDto.getItemNm())

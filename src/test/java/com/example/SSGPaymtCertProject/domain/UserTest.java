@@ -134,6 +134,7 @@ class UserTest {
         assertThrows(ApiException.class, () -> userService.join(kwonUser3));
     }
 
+    /**
     @Test
     public void QueryDSL_Persistence_테스트() {
         // QueryDSL 과 쿼리타입(Q)를 테스트한다.
@@ -172,4 +173,5 @@ class UserTest {
             em.close(); //엔티티 매니저 종료
         }
     }
+    */
 }

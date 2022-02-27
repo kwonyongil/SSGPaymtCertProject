@@ -1,0 +1,19 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== REQUEST
+
+include::{snippets}/cert-setup/http-request.adoc[]
+
+== RESPONSE
+
+include::{snippets}/cert-setup/http-response.adoc[]
+
+== REQUEST
+
+include::{snippets}/cert-setup/http-request.adoc[]
+
+== RESPONSE
+
+include::{snippets}/cert-setup/http-response.adoc[]

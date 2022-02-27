@@ -13,9 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 public class OrdDto extends BaseEntityDto {
 
-    private Long orderNo;
+    private String ordNo;
 
-    private Long ororderNo;
+    private String orordNo;
 
     private Date ordRcpDts;
 

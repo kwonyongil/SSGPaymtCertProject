@@ -25,6 +25,7 @@ public class Item extends BaseEntity {
     @Column(name = "ITEM_NM", nullable = false)
     private String itemNm;
 
+    // 생략가능
     private Long price;
 
     // @OneToMany 는 기본 전략으로 LAZY 를 택한다.
@@ -39,8 +40,7 @@ public class Item extends BaseEntity {
 
 
     @Builder
-    public Item(long id, String itemNm, Long price, String regpeId, String modpeId) {
-        this.id = id;
+    public Item(String itemNm, Long price, String regpeId, String modpeId) {
         this.itemNm = itemNm;
         this.price = price;
         this.regpeId = regpeId;
