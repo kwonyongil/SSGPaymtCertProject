@@ -19,43 +19,15 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-ext {
-	snippetsDir = file('build/generated-snippets')
-}
-
-test {
-	outputs.dir snippetsDir
-}
-
-// gradle build 시 test -> asciidoctor 순으로 수행됩니다.
-asciidoctor {
-	inputs.dir snippetsDir
-	dependsOn test
-}
-
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
-}
-
-bootJar {
-	// gradle build 시 asciidoctor -> bootJar 순으로 수행됩니다.
-	dependsOn asciidoctor
-	// gradle build 시 ./build/asciidoc 에 html 파일이 생깁니다.
-	// 이것을 jar 안에 /static/docs/ 폴더에 복사가 됩니다.
-	copy {
-		from "${asciidoctor.outputDir}"
-		into 'BOOT-INF/classes/static/docs'
+configurations {
+	asciidoctorExtensions
+	compileOnly {
+		extendsFrom annotationProcessor
 	}
 }
+ext {
 
-task copyDocument(type: Copy) {
-	dependsOn asciidoctor
-	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs")
-}
-
-build {
-	dependsOn copyDocument
+	snippetsDir = file('build/generated-snippets')
 }
 
 // 실행시키면 QueryDSL의 QClass 생성가능하다.
@@ -85,7 +57,6 @@ ext["h2.version"] = "1.4.199"
 
 /* dependencie 등록 블럭, hover 하면 버전이 나온다. */
 dependencies {
-	implementation 'junit:junit:4.13.1'
 	implementation 'junit:junit:4.13.1'
 
 	/* 롬복 : @getter, @setter 등 반복 메서드 작성 코드를 줄여줌 */
@@ -172,10 +143,12 @@ dependencies {
 	/* mockmvc 를 restdocs 에 사용할수 있게 하는 라이브러리입니다. Rest Assured 를 사용하자고 하시면
 	testCompile('org.springframework.restdocs:spring-restdocs-restassured') 를 대신 사용하시면 됩니다. */
 	testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
-}
-
-test {
-	useJUnitPlatform()
+	// .adoc 파일이 build/generated-snippets 을 가리키도록 자동으로 구성해주는 설정
+	// adoc 파일에 아래 코드를 추가할 필요가 없음! -> docinfo 정상 include 가능해짐
+	// ifndef::snippets[]
+	// :snippets: ./build/generated-snippets
+	// endif::[]
+	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
 
 /* queryDSL QClass 가 생성될 경로 설정 */
@@ -207,3 +180,58 @@ project.afterEvaluate {
 					',lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
 	]
 }
+
+
+test {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+
+asciidoctor {
+	// gradle build 시 test -> asciidoctor 순으로 수행됩니다.
+	dependsOn test
+	configurations 'asciidoctorExtensions'
+	inputs.dir snippetsDir
+	//attributes["snippets"]=snippetsDir
+	sources{
+		include("**/index.adoc","**/common/*.adoc")
+	}
+
+	baseDirFollowsSourceFile()
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+build {
+	dependsOn copyDocument
+}
+
+
+//
+//bootJar {
+//    dependsOn asciidoctor
+//    copy {
+//        from "${asciidoctor.outputDir}"
+//        into 'src/main/resources/static/docs'
+//    }
+
+//asciidoctor {
+//	inputs.dir snippetsDir
+//	dependsOn test
+//}
+//
+//asciidoctor.doFirst {
+//	delete file('src/main/resources/static/docs')
+//}
+//
+//task copyDocument(type: Copy) {
+//	dependsOn asciidoctor
+//	from file("build/docs/asciidoc")
+//	into file("src/main/resources/static/docs")
+//}
+//

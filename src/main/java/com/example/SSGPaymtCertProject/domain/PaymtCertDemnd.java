@@ -4,7 +4,6 @@ import com.example.SSGPaymtCertProject.domain.base.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -46,12 +45,12 @@ public class PaymtCertDemnd extends BaseEntity {
     @Column(name = "CERT_CHNL_NM", nullable = false)
     private String certChnlNm;
 
-    @Column(name = "PAYMT_CERT_TYPE_NM", nullable = false)
-    private String paymtCertTypeNm;
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private PaymtCertTypeNm paymtCertTypeNm;
 
     @Column(name = "FNCCO_CD")
     private String fnccoCd;
-
 
     /**
      *  주 테이블에 외래 키
@@ -102,7 +101,7 @@ public class PaymtCertDemnd extends BaseEntity {
     public PaymtCertDemnd(String paymtMeansCd, String ordNo, Long paymtAmt,
                           String ordpeNm, Long ordpeId, String itemNm,
                           Long itemId, String paymtCertRstUrl, String certChnlNm,
-                          String paymtCertTypeNm, String regpeId, String modpeId,
+                          PaymtCertTypeNm paymtCertTypeNm, String regpeId, String modpeId,
                           String fnccoCd) {
         this.paymtMeansCd = paymtMeansCd;
         this.ordNo = ordNo;

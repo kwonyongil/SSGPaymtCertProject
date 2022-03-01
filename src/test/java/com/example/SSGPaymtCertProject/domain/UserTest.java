@@ -3,7 +3,6 @@ package com.example.SSGPaymtCertProject.domain;
 import com.example.SSGPaymtCertProject.exception.ApiException;
 import com.example.SSGPaymtCertProject.repository.UserRepository;
 import com.example.SSGPaymtCertProject.service.user.UserService;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnit;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.jupiter.api.Assertions.assertThrows;

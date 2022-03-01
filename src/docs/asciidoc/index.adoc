@@ -1,0 +1,45 @@
+= API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+:docinfo: shared-head
+
+[[introduction]]
+== 소개
+
+CERT API
+
+[[common]]
+
+=== Common Response
+
+include::{snippets}/common/custom-response-fields.adoc[]
+
+include::{snippets}/common/custom-response-fields-paymtCertTypeNm.adoc[]
+
+&#160;
+
+== Cert API
+[[cert-setup-V3]]
+=== 추가 Ver.3
+
+==== Request
+
+include::{snippets}/cert-setup/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/cert-setup/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/cert-setup/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/cert-setup/http-response.adoc[]
+
+&#160;

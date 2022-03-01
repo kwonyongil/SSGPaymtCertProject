@@ -1,5 +1,6 @@
 package com.example.SSGPaymtCertProject.domain.dto;
 
+import com.example.SSGPaymtCertProject.domain.PaymtCertTypeNm;
 import lombok.*;
 
 @EqualsAndHashCode(callSuper = false)
@@ -15,6 +16,8 @@ public class CertDataResDto {
     private String paymtMeansCd;
 
     private String certPageUrl;
+
+    private PaymtCertTypeNm paymtCertTypeNm;
 
     private String fnccoCd;
 }

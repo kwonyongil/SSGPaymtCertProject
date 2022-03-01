@@ -1,0 +1,6 @@
+= API Document
+:doctype: book
+:icons: font
+
+[[paymtCertTypeNm]]
+include::{snippets}/common/custom-response-fields-paymtCertTypeNm.adoc[]

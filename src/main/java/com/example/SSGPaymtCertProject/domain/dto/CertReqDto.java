@@ -1,6 +1,7 @@
 package com.example.SSGPaymtCertProject.domain.dto;
 
 import com.example.SSGPaymtCertProject.domain.Paymt;
+import com.example.SSGPaymtCertProject.domain.PaymtCertTypeNm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -46,8 +47,8 @@ public class CertReqDto extends BaseEntityDto{
     @NotBlank
     private String certChnlNm;
 
-    @NotBlank
-    private String paymtCertTypeNm;
+    @NotNull
+    private PaymtCertTypeNm paymtCertTypeNm;
 
     private String crdcoCd;
 
@@ -99,7 +100,7 @@ public class CertReqDto extends BaseEntityDto{
     @Builder
     public CertReqDto(String paymtMeansCd, String ordNo, Long paymtAmt,
                       String ordpeNm, Long ordpeId, String itemNm, Long itemId,
-                      String paymtCertRstUrl, String certChnlNm, String paymtCertTypeNm,
+                      String paymtCertRstUrl, String certChnlNm, PaymtCertTypeNm paymtCertTypeNm,
                       String regpeId, String modpeId,String crdcoCd) {
         this.paymtMeansCd = paymtMeansCd;
         this.ordNo = ordNo;

@@ -1,29 +1,20 @@
 package com.example.SSGPaymtCertProject.controller;
 
-import com.example.SSGPaymtCertProject.config.SentryConfig;
-import com.example.SSGPaymtCertProject.config.WebSecurityConfig;
+import com.example.SSGPaymtCertProject.ApiDocumentationTest;
+import com.example.SSGPaymtCertProject.domain.PaymtCertTypeNm;
 import com.example.SSGPaymtCertProject.domain.dto.CertDataResDto;
 import com.example.SSGPaymtCertProject.domain.dto.CertReqDto;
 import com.example.SSGPaymtCertProject.domain.dto.CertResDto;
-import com.example.SSGPaymtCertProject.service.cert.CertService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.example.SSGPaymtCertProject.util.ApiDocumentUtils.getDocumentRequest;
 import static com.example.SSGPaymtCertProject.util.ApiDocumentUtils.getDocumentResponse;
+import static com.example.SSGPaymtCertProject.util.DocumentAttributeProvider.getChnlExample;
+import static com.example.SSGPaymtCertProject.util.DocumnetLinkGenerator.DocUrl.PAYMT_CERT_TYPE_NM;
+import static com.example.SSGPaymtCertProject.util.DocumnetLinkGenerator.generateLinkCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -35,54 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *  @since 2022. 02. 28
  *  @author kwon-yong-il
  *         <h2>RestDoc</h2>
- *         <h3>통합 테스트</h3>
+ *         <h3>인증 통합 테스트</h3>
  */
-@RunWith(SpringRunner.class)
-/**
- * MVC 를 위한 테스트.
- * 웹에서 테스트하기 힘든 컨트롤러를 테스트하는 데 적합.
- * 웹상에서 요청과 응답에 대해 테스트할 수 있음.
- * 시큐리티, 필터까지 자동으로 테스트하며, 수동으로 추가/삭제 가능.
- * @SpringBootTest 어노테이션보다 가볍게 테스트할 수 있음.
- * 다음과 같은 내용만 스캔하도록 제한함.
- * @Controller, @ControllerAdvice, @JsonComponent, Converter,
- * GenericConverter, Filter, HandlerInterceptor,
- */
-@WebMvcTest(value = CertController.class,
-        // excludeFilters : Component scan 에서 제외하고자 하는 클래스 정의
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-        classes = {WebSecurityConfig.class, SentryConfig.class}))
-/**
- *  webAppContextSetup(webApplicationContext)
- *  addFilters 를 false 로 하여 filter 로 인한 문제를 회피한다. ex. cors
- */
-@AutoConfigureMockMvc(addFilters = false)
-/**
- * getDocumentRequest 에 선언된 uri 와 동일 기능을 제공, 아래의 우선순위로 적용
- * 1. @AutoConfigureRestDocs 에 uri 정보가 선언되어있으면 적용 없으면 2 단계로
- * 2. getDocumentRequest 에 uri 정보가 설정되어있으면 적용 없으면 3 단계로
- * 3. 기본설정값 적용 http://localhost:8080
- */
-// @AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
-@AutoConfigureRestDocs(uriHost = "docs.api.com")
-public class CertControllerTest {
-
-    /**
-     * @AutoConfigureMockMvc
-     */
-    @Autowired
-    private MockMvc mockMvc;
-
-    /**
-     * spring boot 사용시 (spring-boot-starter-web 에 포함되어 있음)
-     * JacksonAutoConfiguration 에 의해 등록된 빈이 없는 경우에
-     * 자동으로  Jackson2ObjectMapperBuilder , ObjectMapper 빈 등록
-     */
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean // mocking 을 하기위해 @MockBean 을 선언
-    private CertService certService;
+public class CertControllerTest extends ApiDocumentationTest {
 
     @Test
     public void 인증정보_셋업_테스트() throws Exception {
@@ -97,6 +43,7 @@ public class CertControllerTest {
         data.setPaymtAmt(1000L);
         data.setPaymtMeansCd("100");
         data.setCertPageUrl("http://127.0.0.1/cert/gate/" + 1L);
+        data.setPaymtCertTypeNm(PaymtCertTypeNm.CREDITCARD);
         data.setFnccoCd("01");
         response.setData(data);
         // eq 는 일치해야하는 조건, any 는 해당 클래스기만 하면
@@ -116,7 +63,7 @@ public class CertControllerTest {
                 .itemId(1L)
                 .paymtCertRstUrl("127.0.0.1/cert/gate")
                 .certChnlNm("pc")
-                .paymtCertTypeNm("card")
+                .paymtCertTypeNm(PaymtCertTypeNm.CREDITCARD)
                 .crdcoCd("01")
                 .build();
 
@@ -143,7 +90,6 @@ public class CertControllerTest {
 // relaxedRequestFields 는 모든 필드를 반드시 문서화하지 않아도 된다.
 //                        requestFields(
                         relaxedRequestFields(
-
                                 fieldWithPath("paymtMeansCd").type(JsonFieldType.STRING).description("결제수단"),
                                 fieldWithPath("ordNo").type(JsonFieldType.STRING).description("주문번호"),
                                 fieldWithPath("paymtAmt").type(JsonFieldType.NUMBER).description("결제금액"),
@@ -152,9 +98,18 @@ public class CertControllerTest {
                                 fieldWithPath("itemNm").type(JsonFieldType.STRING).description("아이템명"),
                                 fieldWithPath("itemId").type(JsonFieldType.NUMBER).description("아이템ID"),
                                 fieldWithPath("paymtCertRstUrl").type(JsonFieldType.STRING).description("인증결과URL"),
-                                fieldWithPath("certChnlNm").type(JsonFieldType.STRING).description("인증체널명"),
-                                fieldWithPath("paymtCertTypeNm").type(JsonFieldType.STRING).description("인증타입명"),
-                                fieldWithPath("crdcoCd").type(JsonFieldType.STRING).description("카드사코드")
+                                fieldWithPath("certChnlNm").type(JsonFieldType.STRING).attributes(getChnlExample()).description("인증체널명"),
+                                // fieldWithPath("birthDate").type(JsonFieldType.STRING).attributes(getDateFormat()).description("생년월일"), // 양식 추가
+                                fieldWithPath("paymtCertTypeNm").type(JsonFieldType.STRING).description(generateLinkCode(PAYMT_CERT_TYPE_NM)),
+                                /** 기본적으로 제공하는 스니펫에는 없는 필드이기에 스니펫을 customizing (optional 필수값 여부!)
+                                 *  커스텀 스니펫 적용 (스니펫은 mustache 문법을 사용)
+                                 *  https://github.com/spring-projects/spring-restdocs/tree/main/spring-restdocs-core/src/main/resources/org/springframework/restdocs/templates/asciidoctor
+                                 *  request-fields 의 스니펫을 customizing 하려면
+                                 *  src/test/resources/org/springframework/restdocs/templates/asciidoctor` 경로에
+                                 *  `request-fields.snippet 파일 추가
+                                 *  mustache 문법 중 }} 은 param 이 비어있거나 false 일때 작동됩니다. 그래서 }true} 을 사용하여 optional 이 false 인 것을 필수로 표현
+                                 */
+                                fieldWithPath("crdcoCd").type(JsonFieldType.STRING).description("카드사코드").optional() // 필수값 여부 위해
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.STRING).description("결과코드"),
@@ -164,6 +119,7 @@ public class CertControllerTest {
                                 fieldWithPath("data.paymtAmt").type(JsonFieldType.NUMBER).description("결제금액"),
                                 fieldWithPath("data.paymtMeansCd").type(JsonFieldType.STRING).description("결제수단코드"),
                                 fieldWithPath("data.certPageUrl").type(JsonFieldType.STRING).description("인증PageUrl"),
+                                fieldWithPath("data.paymtCertTypeNm").type(JsonFieldType.STRING).description(generateLinkCode(PAYMT_CERT_TYPE_NM)),
                                 fieldWithPath("data.fnccoCd").type(JsonFieldType.STRING).description("제휴사코드")
                         )
                 ));

@@ -1,5 +1,6 @@
 package com.example.SSGPaymtCertProject.service.cert;
 
+import com.example.SSGPaymtCertProject.domain.PaymtCertTypeNm;
 import com.example.SSGPaymtCertProject.domain.dto.CertDataResDto;
 import com.example.SSGPaymtCertProject.domain.dto.CertReqDto;
 import com.example.SSGPaymtCertProject.domain.dto.CertResDto;
@@ -41,7 +42,7 @@ public class CertServiceTest {
                 .itemId(1L)
                 .paymtCertRstUrl("127.0.0.1/cert/gate")
                 .certChnlNm("pc")
-                .paymtCertTypeNm("card")
+                .paymtCertTypeNm(PaymtCertTypeNm.CREDITCARD)
                 .regpeId("yong")
                 .modpeId("yong")
                 .crdcoCd("01")
@@ -57,7 +58,7 @@ public class CertServiceTest {
                 .itemId(2L)
                 .paymtCertRstUrl("127.0.0.1/cert/gate")
                 .certChnlNm("pc")
-                .paymtCertTypeNm("virtualAccount")
+                .paymtCertTypeNm(PaymtCertTypeNm.KAKAOPAY)
                 .regpeId("yong")
                 .modpeId("yong")
                 .build();
