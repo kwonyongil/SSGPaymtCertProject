@@ -112,6 +112,9 @@ dependencies {
 	// SpringBoot 에서는 의존성만 추가하면 검증을 위한 빈들이 자동으로 등록된다.
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+	/* kafka 관련 디펜덴시 */
+	implementation 'org.springframework.kafka:spring-kafka'
+
 	/**
 	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함
 	 * - JUnit 5 (JUnit 4와의 하위 호환성을위한 빈티지 엔진 포함)
@@ -124,6 +127,10 @@ dependencies {
 	testImplementation ("org.springframework.boot:spring-boot-starter-test") {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	/* kafka 관련 디펜덴시 */
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 

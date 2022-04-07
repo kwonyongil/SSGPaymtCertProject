@@ -15,7 +15,9 @@
 
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    # url: jdbc:h2:tcp://localhost/~/test;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    # 카프카 로컬 테스트를 위해 인메모리 방식으로 변경
+    url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -27,6 +29,7 @@ spring:
         show-sql: true
         format_sql: true
         use_sql_comments: true
+        dialect: org.hibernate.dialect.H2Dialect
   config:
     activate:
       on-profile: local
