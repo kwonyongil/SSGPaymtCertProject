@@ -1,4 +1,4 @@
-package com.example.SSGPaymtCertProject.config;
+package com.example.SSGPaymtCertProject.config.kafka;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -43,6 +43,7 @@ public class KafkaTopicConfiguration {
                 TopicBuilder.name("certTopic").build(),
                 TopicBuilder.name("replyTestReqTopic").build(),
                 TopicBuilder.name("replyTestResTopic").build(),
+                TopicBuilder.name("testListenerTopic").build(),
                 TopicBuilder.name("paymtTopic").partitions(3)
                         .replicas(1)
                         .config(TopicConfig.RETENTION_MS_CONFIG, String.valueOf(1000 * 60 * 60))

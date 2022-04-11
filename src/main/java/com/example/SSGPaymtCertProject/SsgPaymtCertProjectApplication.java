@@ -1,7 +1,16 @@
 package com.example.SSGPaymtCertProject;
 
+import org.apache.kafka.common.Metric;
+import org.apache.kafka.common.MetricName;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.MessageListenerContainer;
+
+import java.util.Map;
 
 /**
  * SpringBootApplication :
@@ -21,4 +30,17 @@ public class SsgPaymtCertProjectApplication {
 		SpringApplication.run(SsgPaymtCertProjectApplication.class, args);
 	}
 
+// Kafka Metric 정보 확인
+//	@Bean
+//	public ApplicationRunner runner(KafkaTemplate<String, String> kafkaTemplate,
+//									KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry) {
+//
+//		return args -> {
+//			Map<MetricName, ? extends Metric> produceMetrics = kafkaTemplate.metrics();
+//			// 그룹 ID 를 지정
+//			MessageListenerContainer container = kafkaListenerEndpointRegistry.getListenerContainer("ssg-pg-id");
+//			// 컨슈머 메트릭은 앞에 키가 하나 더 필요하다.
+//			Map<String, Map<MetricName, ? extends Metric>> consumerMetrics = container.metrics();
+//		};
+//	}
 }

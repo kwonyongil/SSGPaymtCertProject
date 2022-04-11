@@ -1,4 +1,4 @@
-package com.example.SSGPaymtCertProject.config;
+package com.example.SSGPaymtCertProject.config.kafka;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +13,12 @@ import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
 @Configuration
 public class ReplyingKafkaTemplateConfiguration {
 
+    private final ConcurrentKafkaListenerContainerFactory<String, String> containerFactory;
+
+    public ReplyingKafkaTemplateConfiguration(ConcurrentKafkaListenerContainerFactory<String, String> containerFactory) {
+        this.containerFactory = containerFactory;
+    }
+
     // key, value, 응답해주는 객체 타입까지 지정해준다.
     @Bean
     public ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate(ProducerFactory<String, String> producerFactory,
@@ -22,7 +28,7 @@ public class ReplyingKafkaTemplateConfiguration {
     }
 
     @Bean
-    public ConcurrentMessageListenerContainer<String, String> relpiesContainer(ConcurrentKafkaListenerContainerFactory<String, String> containerFactory) {
+    public ConcurrentMessageListenerContainer<String, String> relpiesContainer() {
         // reply 토픽에 대한 헤더정보가 replyTestTopic 가 된다.
         ConcurrentMessageListenerContainer<String, String> container =
                 containerFactory.createContainer("replyTestTopic");

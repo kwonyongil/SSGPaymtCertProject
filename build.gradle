@@ -86,7 +86,7 @@ dependencies {
 	 * https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.3-Release-Notes
 	 */
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	/* JSP대신 springboot가 권장하는 view 템플릿 엔진 */
+	/* JSP 대신 springboot 가 권장하는 view 템플릿 엔진 */
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	/* h2 db 연동용 */
 	implementation("com.h2database:h2")
@@ -114,6 +114,13 @@ dependencies {
 
 	/* kafka 관련 디펜덴시 */
 	implementation 'org.springframework.kafka:spring-kafka'
+
+	/* Java Object 를 JSON 으로 변환, JSON 을 Java Object 로 변환 */
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+
+	/* 프로메테우스 */
+	// https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.7.6'
 
 	/**
 	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함

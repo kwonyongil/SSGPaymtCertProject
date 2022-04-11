@@ -1,5 +1,6 @@
-package com.example.SSGPaymtCertProject.service.kafka;
+package com.example.SSGPaymtCertProject.service.kafka.producer;
 
+import com.example.SSGPaymtCertProject.domain.dto.OrdDto;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaProducerException;
@@ -24,13 +25,16 @@ public class KafkaProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    private final KafkaTemplate<String, OrdDto> kafkaJsonTemplate;
+
     private final RoutingKafkaTemplate routingKafkaTemplate;
 
     private final ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate;
 
-    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate, RoutingKafkaTemplate routingKafkaTemplate,
-                         ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate) {
+    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate, KafkaTemplate<String, OrdDto> kafkaJsonTemplate,
+                         RoutingKafkaTemplate routingKafkaTemplate, ReplyingKafkaTemplate<String, String, String> replyingKafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
+        this.kafkaJsonTemplate = kafkaJsonTemplate;
         this.routingKafkaTemplate = routingKafkaTemplate;
         this.replyingKafkaTemplate = replyingKafkaTemplate;
     }
@@ -56,6 +60,11 @@ public class KafkaProducer {
             }
 
         });
+    }
+
+    /* 객체 비동기 실행 */
+    public void async(String topic, OrdDto ordDto) {
+        kafkaJsonTemplate.send(topic, ordDto);
     }
 
     /* 동기 실행 */

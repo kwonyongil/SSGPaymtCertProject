@@ -1,5 +1,6 @@
 package com.example.SSGPaymtCertProject.service.kafka;
 
+import com.example.SSGPaymtCertProject.service.kafka.producer.KafkaProducer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 @SpringBootTest
-public class kafkaProducerTest {
+public class KafkaProducerTest {
 
     @Autowired
     KafkaTemplate kafkaTemplate;

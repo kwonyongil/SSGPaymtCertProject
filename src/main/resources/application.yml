@@ -12,7 +12,7 @@
 # 2. update : 수정된 스키마만 반영
 # devtools : livereload - 개발용만 true, 실서버는 false, port 는 아무거나
 # thymeleaf cache : false 수정 반영 즉각 반영, 운영모드는 true
-
+# management.endpoints.web.exposure : actuator 가 포함할 endpoint 지정
 spring:
   datasource:
     # url: jdbc:h2:tcp://localhost/~/test;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
@@ -46,13 +46,21 @@ spring:
     cache: false
 
 
-
 logging:
   level:
     root: debug
     org.hibernate.SQL: debug
     org.hibernate.type: debug
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics, prometheus"
+
+# 카프카, 프로메테우스 테스트용 서버 포트 변경
+#server:
+#  port: 8100
 ---
 
 

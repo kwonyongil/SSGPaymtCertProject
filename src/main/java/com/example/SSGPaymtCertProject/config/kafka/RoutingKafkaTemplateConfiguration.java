@@ -1,4 +1,4 @@
-package com.example.SSGPaymtCertProject.config;
+package com.example.SSGPaymtCertProject.config.kafka;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.ByteArraySerializer;

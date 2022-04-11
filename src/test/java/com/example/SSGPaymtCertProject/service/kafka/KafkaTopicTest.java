@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @SpringBootTest
-public class kafkaTopicTest {
+public class KafkaTopicTest {
 
     @Autowired
     AdminClient adminClient;
