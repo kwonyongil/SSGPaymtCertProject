@@ -81,6 +81,13 @@ public class KafkaConsumer extends AbstractConsumerSeekAware {
         System.out.println("Listener ordDto : " + ordDto);
     }
 
+    @KafkaListener(id = "ordDtoTopic.DLT-listener", topics = "ordDtoTopic.DLT",
+            containerFactory = "kafkaJsonContainerFactory")
+    public void listenOrdDtoDLT(OrdDto ordDto) {
+        System.out.println("Listener DLT ordDto : " + ordDto);
+    }
+
+
     @KafkaListener(id = "offsetTopic-listener-id", topics = "offsetTopic-listener")
     public void listenOffset(String message) {
         System.out.println("message = " + message);

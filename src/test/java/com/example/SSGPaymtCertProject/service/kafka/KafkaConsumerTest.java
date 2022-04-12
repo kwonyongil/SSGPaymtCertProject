@@ -39,7 +39,6 @@ public class KafkaConsumerTest {
                 .build();
 
         this.ordDto2 = OrdDto.builder()
-                .ordNo(null)
                 .orordNo("test2")
                 .ordRcpDts(new Date())
                 .build();
@@ -86,7 +85,7 @@ public class KafkaConsumerTest {
     @Test
     public void 카프카리스너_컨슈머_테스트4() {
         // KafkaConsumer.listenOrdDto 테스트, 발리데이션 체크용 ordNo 빈값, 에러 발생!
-        // kafkaProducer.async("ordDtoTopic", ordDto2);
+        kafkaProducer.async("ordDtoTopic", ordDto2);
     }
 
     @AfterEach

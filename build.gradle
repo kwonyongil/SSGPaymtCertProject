@@ -122,6 +122,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.7.6'
 
+	/* 카프카 스트림즈 */
+	implementation 'org.apache.kafka:kafka-streams'
+
 	/**
 	 * "spring-boot-starter-test" 에는 다음 라이브러리들이 포함
 	 * - JUnit 5 (JUnit 4와의 하위 호환성을위한 빈티지 엔진 포함)

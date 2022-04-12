@@ -36,7 +36,7 @@ public class KafkaProducerTest {
 
     @Test
     public void 카프카프로듀스_메시지_테스트2() {
-        kafkaTemplate.send("quickstart-events", "hello-wrold");
+        kafkaTemplate.send("quickstart-events", "hello-world");
     }
 
     @Test
